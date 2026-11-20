@@ -1,0 +1,56 @@
+Package: heaven
+Type: Package
+Title: Fast Data Preparation for Danish Registry Data
+Version: 2026.10.30
+Authors@R: c(
+    person(given = c("Christian","Tobias"), family = "Torp-Pedersen",
+           email = "ctp@heart.dk", role = c("aut", "cre")),
+    person(given = c("Helene", "Charlotte"), family = "Rytgaard", role = "aut"),
+    person(given = "Anders", family = "Munch", role = "aut"),
+    person(given = c("Matthew", "David"), family = "Phelps", role = "aut"),
+    person(given = c("Thomas", "Alexander"), family = "Gerds", role = "aut")
+    )
+Description: Prepares and analyses large Danish administrative and health registry
+    datasets. Provides memory-efficient routines for cohort construction,
+    time splitting, code-based condition identification, prescription exposure periods,
+    risk-set matching, and direct standardisation. The package is designed for secure
+    research environments such as Statistics Denmark and builds on the data structures
+    provided by the 'data.table' package.
+Depends: R (>= 3.5.0)
+Encoding: UTF-8
+Imports: data.table(>= 1.9.6), stats, parallel, foreach, utils, Rcpp
+        (>= 1.0.14), lava, lubridate, tools
+LinkingTo: Rcpp, RcppArmadillo
+Suggests: arrow, dplyr, ggplot2, scales, zoo, testthat, doParallel,
+        survival, Publish, sas7bdat, prodlim, riskRegression, knitr,
+        rmarkdown
+License: GPL (>= 3)
+URL: https://github.com/tagteam/heaven
+BugReports: https://github.com/tagteam/heaven/issues
+VignetteBuilder: knitr
+LazyData: true
+Collate: 'RcppExports.R' 'averageIncome.R' 'charlsonIndex.R'
+        'createProject.R' 'riskSetMatch.R' 'exposureMatch.R'
+        'findConditions.R' 'getAdmLimits.R' 'groupAges.R'
+        'guessRawdataDirectory.R' 'heaven-data.R' 'heaven-package.R'
+        'hypertensionMedication.R' 'importDREAM.R' 'importSAS.R'
+        'incidenceMatch.R' 'kommuneRegion.R' 'lexisFromTo.R'
+        'lexisSeq.R' 'lexisTwo.R' 'listRawdata.R' 'matchReport.R'
+        'medicinMacro.R' 'mm1.R' 'mm2.R' 'patientProfiles.R'
+        'poissonRisk.R' 'poissonregression.R' 'sasWhereConstructors.R'
+        'scanRawdata.R' 'simAdmissionData.R' 'simPop.R'
+        'simPrescriptionData.R' 'splitFromTo.R' 'splitSeq.R'
+        'splitTwo.R' 'standardize.prodlim.R' 'standardize.proportion.R'
+        'standardize.rate.R' 'view_parquet.R' 'xrecepter.R'
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.1
+NeedsCompilation: yes
+Packaged: 2026-10-30 14:47:45 UTC; ctp
+Author: Christian Tobias Torp-Pedersen [aut, cre],
+  Helene Charlotte Rytgaard [aut],
+  Anders Munch [aut],
+  Matthew David Phelps [aut],
+  Thomas Alexander Gerds [aut]
+Maintainer: Christian Tobias Torp-Pedersen <ctp@heart.dk>
+Repository: CRAN
+Date/Publication: 2026-11-20 12:00:02 UTC

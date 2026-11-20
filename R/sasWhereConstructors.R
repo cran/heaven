@@ -1,0 +1,99 @@
+#' @title sasDateRange
+#'
+#' @description Helper function for making sas "Where" statements for use in importSAS(). Creates date range (inclusive) in SAS formate
+#' @param var.date Name of the date variable in the SAS dataset
+#' @param date.start The start date of the desired date range in r date format
+#' @param date.end The end date of the desired date range in r date format
+#' @param inclusive Logical. If \code{TRUE} do greater or equal instead of greater.  
+#' @return Function returns a string that can be passed to the "where" statement
+#'   of importSAS. Alternatinvely it can be passed to makeSasWhereStatment
+#'   function to be combined with further SAS where statements
+#' @author Matthew Phelps
+#' @examples
+#' sasDateRange("inddto", as.Date("2015-01-01"), as.Date("2016-01-01"))
+#' @export
+sasDateRange <-
+  function(var.date,
+           date.start,
+           date.end,
+           inclusive = TRUE) {
+    op <- c(" > '", " < '")
+    if (inclusive)
+      op <- c(" >= '", " <= '")
+    paste0(
+      paste0(var.date, op[1], rDateToSas(date.start), "'d"),
+      " AND ",
+      paste0(var.date, op[2], rDateToSas(date.end), "'d")
+    )
+  }
+
+#' rDateToSas
+#'
+#' @param rdate Date object to be converted into a format SAS can read
+#' @return A character vector of the same length as \code{rdate}, with dates
+#' formatted as day, abbreviated month and year (for example,
+#' \code{"01Jan2015"} in an English locale), suitable for SAS date literals.
+#' @export
+rDateToSas <- function(rdate) {
+  format(rdate, '%d%b%Y')
+}
+
+
+
+
+
+#' @title sasSubstr
+#'
+#' @description Helper function to construct a SAS 'where' statement to search through substrings in a SAS dataset via importSAS
+#'
+#'@usage sasSubstr(str.vec, target.var)
+#'
+#' @param str.vec Character vector where each element is the start of the
+#'   substring that should be searched for. Fx. c("DI05", "DI06) will search for
+#'   any recrods that start with DI05 or DI06.
+#' @param target.var Character name of the variable in the SAS dataset that is
+#'   to be searched
+#' @details The function allows a user to search for strings matching those in
+#'   `str.vec` in SAS datasets. Fx it can be used to find records in the LPR that match an ICD code
+#'
+#' @return Returns a string that can be passed to the "where" arguments
+#'   of importSAS, or combined with other conditions in sasWhereConstructor
+#' @author Matthew Phelps
+#' @export
+#' @seealso importSAS
+#' @examples
+#'library(heaven)
+#'x <- c("DI05", "DI06")
+#'sasSubstr(x, target.var="A")
+#'
+#'
+sasSubstr <- function(str.vec, target.var) {
+  stopifnot(is.character(str.vec))
+  x <- paste0(str.vec, collapse = ", ")
+  x.split <- strsplit(x, split = ", ")[[1]]
+  x.nchar <- nchar(x.split)
+  out <- paste0("substr (",
+                target.var,
+                ", 1, ",
+                x.nchar,
+                ") = '",
+                x.split,
+                "'",
+                collapse = " OR ")
+  paste0("(", out, ")")
+}
+
+
+#' sasWhereConstructor
+#'
+#' @description Simple helper function that combines multiple SAS where statements with "AND"
+#' @param ... A vector of valid SAS where statements.
+#' @param collapse Argment passed to paste0. default is \code{" AND "}.
+#' @return Returns a string that can be passed to the "where" argument of importSAS
+#' @author Matthew Phelps
+#' 
+#' @export
+sasWhereConstructor <- function(..., collapse = " AND ") {
+  dots <- list(...)
+  paste0(dots, collapse = collapse)
+}
