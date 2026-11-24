@@ -25,7 +25,8 @@ daysnonhosp <- function(id, pdate, iddates, inddto, uddto) {
 #' @param idunique Unique subject identifiers, one per row of \code{index}.
 #' @param index Data.frame with zero-based start and end row indices:
 #' \code{id.start}, \code{id.end} for prescriptions and
-#' \code{id.start.adm}, \code{id.end.adm} for admissions.
+#' \code{id.start.adm}, \code{id.end.adm} for admissions. For a subject
+#' without admissions, use a start of 0 and an end of -1.
 #' @param prescriptionwindow prescription window
 #' @param maxdepot see medicine macro
 #' @param verbose Set to \code{FALSE} or \code{0} to suppress diagnostic

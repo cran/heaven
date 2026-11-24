@@ -30,7 +30,8 @@ innerMedicinMacro(
 
 \item{index}{Data.frame with zero-based start and end row indices:
 \code{id.start}, \code{id.end} for prescriptions and
-\code{id.start.adm}, \code{id.end.adm} for admissions.}
+\code{id.start.adm}, \code{id.end.adm} for admissions. For a subject
+without admissions, use a start of 0 and an end of -1.}
 
 \item{prescriptionwindow}{prescription window}
 

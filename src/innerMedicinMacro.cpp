@@ -37,7 +37,8 @@ static double hospitalDaysBetween(const arma::vec& admin, const arma::vec& admax
 //' @param idunique Unique subject identifiers, one per row of \code{index}.
 //' @param index Data.frame with zero-based start and end row indices:
 //' \code{id.start}, \code{id.end} for prescriptions and
-//' \code{id.start.adm}, \code{id.end.adm} for admissions.
+//' \code{id.start.adm}, \code{id.end.adm} for admissions. For a subject
+//' without admissions, use a start of 0 and an end of -1.
 //' @param prescriptionwindow prescription window
 //' @param maxdepot see medicine macro
 //' @param verbose Set to \code{FALSE} or \code{0} to suppress diagnostic
@@ -121,18 +122,20 @@ Rcpp::List innerMedicinMacro(Rcpp::DataFrame dat,
     double aidstart = idstartadm(i);
     double aidend = idendadm(i);
     arma::uvec did = regspace<uvec>(didstart, 1, didend);
-    arma::uvec aid = regspace<uvec>(aidstart, 1, aidend);
 
-    // Rcout << "aid = " << std::endl;
-    // aid.print();
-
-    // Rcout << "aid2 = " << std::endl;
-    // aid2.print();
-
-    // subset data //
-    // aid.print();
-    arma::vec admin = INadmin.elem(aid);
-    arma::vec admax = INadmax.elem(aid);
+    arma::vec admin;
+    arma::vec admax;
+    // Check for an empty range before converting to unsigned indices.
+    if (!(aidend < aidstart)) {
+      if (!(aidstart >= 0 && aidend < INadmin.n_elem &&
+            std::floor(aidstart) == aidstart && std::floor(aidend) == aidend)) {
+        Rcpp::stop("Invalid admission row range in index.");
+      }
+      const uword first = static_cast<uword>(aidstart);
+      const uword last = static_cast<uword>(aidend);
+      admin = INadmin.subvec(first, last);
+      admax = INadmax.subvec(first, last);
+    }
     
     // Rcout << "d id's" << std::endl;
     // did.print();

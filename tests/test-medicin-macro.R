@@ -44,6 +44,32 @@ test_that("inconsistent pnr format",{
                               admdb.datevars=c("inddto","uddto")))
 })
 
+test_that("dynamic exposure handles empty and patient-specific admission ranges", {
+    start <- as.Date("2010-01-01")
+    prescriptions <- data.table(pnr = 1:2, atc = "C03", eksd = start,
+                                strnum = 1, packsize = 5, apk = 1)
+    admissions <- data.table(pnr = 2, inddto = start + c(2, 5),
+                            uddto = start + c(4, 6), pattype = 0)
+    drugs <- list(drug = list(atc = "C03", maxdepot = 0,
+                             period = start + c(0, 30), prescriptionwindow = 2,
+                             doses = list(value = 1, min = 1, max = 1, def = 1)))
+
+    run <- function(admdb) {
+        medicinMacro(drugs, drugdb = prescriptions, admdb = admdb,
+                     admdb.datevars = c("inddto", "uddto"))$drug
+    }
+    without <- run(NULL)
+    expect_equal(without$pnr, 1:2)
+    expect_equal(without$firstday, rep(start, 2))
+    expect_equal(without$lastday, rep(start + 5, 2))
+    expect_equal(run(admissions[0]), without)
+    expect_equal(run(copy(admissions)[, pnr := 3]), without)
+
+    with_admissions <- run(admissions)
+    expect_equal(with_admissions[pnr == 1], without[pnr == 1])
+    expect_equal(with_admissions[pnr == 2, lastday], start + 8)
+})
+
 test_that("pnr as character",{
     a <- medicinMacro(drugs=list("drug1"=drug1),drugdb=testmed,admdb=testlpr,admdb.datevars=c("inddto","uddto"))
     testmed[,pnr:=as.character(pnr)]

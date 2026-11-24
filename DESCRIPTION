@@ -1,7 +1,7 @@
 Package: heaven
 Type: Package
 Title: Fast Data Preparation for Danish Registry Data
-Version: 2026.10.30
+Version: 2026.11.24
 Authors@R: c(
     person(given = c("Christian","Tobias"), family = "Torp-Pedersen",
            email = "ctp@heart.dk", role = c("aut", "cre")),
@@ -45,7 +45,7 @@ Collate: 'RcppExports.R' 'averageIncome.R' 'charlsonIndex.R'
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.1.1
 NeedsCompilation: yes
-Packaged: 2026-10-30 14:47:45 UTC; ctp
+Packaged: 2026-11-24 13:38:00 UTC; ctp
 Author: Christian Tobias Torp-Pedersen [aut, cre],
   Helene Charlotte Rytgaard [aut],
   Anders Munch [aut],
@@ -53,4 +53,4 @@ Author: Christian Tobias Torp-Pedersen [aut, cre],
   Thomas Alexander Gerds [aut]
 Maintainer: Christian Tobias Torp-Pedersen <ctp@heart.dk>
 Repository: CRAN
-Date/Publication: 2026-11-20 12:00:02 UTC
+Date/Publication: 2026-11-24 16:00:08 UTC
